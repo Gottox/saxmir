@@ -9,11 +9,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class CssHandler extends DefaultHandler {
-	CssNavigator<CssHandler> navigator = new CssNavigator<CssHandler>();
+	private CssNavigator navigator = new CssNavigator();
 
 	@Override
 	public void startDocument() throws SAXException {
-		navigator.onStartMatching(this, null, null);
+		getNavigator().onStartMatching(getNavigator(), null, null);
 	}
 	
 	public void startElement(String uri, String localName, String qName,
@@ -22,29 +22,24 @@ public class CssHandler extends DefaultHandler {
 		for(int i = 0; i < attrs.getLength(); i++) {
 			attrHash.put(attrs.getLocalName(i), attrs.getValue(i));
 		}
-		navigator.onStartElement(this, localName, attrHash);
+		getNavigator().onStartChild(getNavigator(), localName, attrHash);
 	}
 
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		navigator.onCharacters(this, new String(ch, start, length));
+		getNavigator().onCharacters(getNavigator(), new String(ch, start, length));
 	}
 
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
-		navigator.onEndElement(this, localName);
+		getNavigator().onEndChild(getNavigator(), localName);
 	}
 
 	public void endDocument() throws SAXException {
-		navigator.onEndMatching(this, null);
+		getNavigator().onEndMatching(getNavigator(), null);
 	}
 
-	public void register(String selector, CssSelectorCallback<CssHandler> handler) {
-		navigator.register(selector, handler);
-	}
-
-	public void register(Set<CssSelector> selectors,
-			CssSelectorCallback<CssHandler> handler) {
-		navigator.register(selectors, handler);
+	public CssNavigator getNavigator() {
+		return navigator;
 	}
 }

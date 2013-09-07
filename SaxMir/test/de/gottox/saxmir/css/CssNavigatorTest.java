@@ -2,262 +2,295 @@ package de.gottox.saxmir.css;
 
 import static org.junit.Assert.*;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 
 import org.junit.Test;
 
 public class CssNavigatorTest {
 
-	private final class TestCallback implements CssSelectorCallback<Object> {
-		private String tag;
-
-		public TestCallback(String tag) {
-			this.tag = tag;
-		}
-
-		@Override
-		public void onStartMatching(Object handler, CharSequence tag,
-				Map<CharSequence, CharSequence> attributes) {
-			assertEquals(CssNavigatorTest.this.handler, handler);
-			matched = tag;
-		}
-
-		@Override
-		public void onStartElement(Object handler, CharSequence tag,
-				Map<CharSequence, CharSequence> attributes) {
-			assertEquals(CssNavigatorTest.this.handler, handler);
-			assertEquals(this.tag, tag);
-			start = tag;
-		}
-
-		@Override
-		public void onEndMatching(Object handler, CharSequence tag) {
-			assertEquals(CssNavigatorTest.this.handler, handler);
-			end = tag;
-		}
-
-		@Override
-		public void onEndElement(Object handler, CharSequence tag) {
-			assertEquals(CssNavigatorTest.this.handler, handler);
-			assertEquals(this.tag, tag);
-			unmatched = tag;
-		}
-
-		@Override
-		public void onCharacters(Object handler, CharSequence seq) {
-			assertEquals(CssNavigatorTest.this.handler, handler);
-			chars = seq;
-		}
-	}
-
 	final Map<CharSequence, CharSequence> empty = new HashMap<CharSequence, CharSequence>();
-	final Object handler = new Object();
-
-	CharSequence matched = null, start = null, end = null, unmatched = null;
-	CharSequence chars = null;
 
 	@Test
 	public void testSimpleTraversal() {
-		CssNavigator<Object> navigator = new CssNavigator<Object>();
+		CssNavigator navigator = new CssNavigator();
 
-		navigator.register("a", new TestCallback("a"));
+		final TestCallback handler = new TestCallback();
+		navigator.register("a", handler);
 
+		navigator.onStartMatching(null, "body", empty);
+		navigator.onStartChild(null, "body", empty);
+		navigator.onStartChild(null, "a", empty);
+		navigator.onCharacters(null, "foobar");
+		navigator.onEndChild(null, "a");
+		navigator.onEndChild(null, "body");
 
-		navigator.onStartMatching(handler, "body", empty);
-		navigator.onStartElement(handler, "body", empty);
-		navigator.onStartElement(handler, "a", empty);
-		navigator.onCharacters(handler, "foobar");
-		navigator.onEndElement(handler, "a");
-		navigator.onEndElement(handler, "body");
+		navigator.onEndMatching(null, null);
 
-		navigator.onEndMatching(handler, null);
-
-		assertEquals("foobar", chars);
-		assertCallback("a");
+		assertEquals("foobar", handler.chars);
+		assertCallback(handler, "a", null);
 	}
 
 	@Test
 	public void testChild() {
-		CssNavigator<Object> navigator = new CssNavigator<Object>();
+		CssNavigator navigator = new CssNavigator();
 
-		navigator.register("a c", new TestCallback("c"));
-		navigator.onStartMatching(handler, "body", empty);
+		final TestCallback handler = new TestCallback();
+		navigator.register("a c", handler);
+		navigator.onStartMatching(null, "body", empty);
 
-		navigator.onStartElement(handler, "body", empty);
+		navigator.onStartChild(null, "body", empty);
 
-		navigator.onStartElement(handler, "a", empty);
+		navigator.onStartChild(null, "a", empty);
 
-		navigator.onStartElement(handler, "b", empty);
+		navigator.onStartChild(null, "b", empty);
 
-		navigator.onStartElement(handler, "c", empty);
-		navigator.onCharacters(handler, "foobar");
-		navigator.onEndElement(handler, "c");
+		navigator.onStartChild(null, "c", empty);
+		navigator.onCharacters(null, "foobar");
+		navigator.onEndChild(null, "c");
 
-		navigator.onCharacters(handler, "not this");
+		navigator.onCharacters(null, "not this");
 
-		navigator.onEndElement(handler, "b");
+		navigator.onEndChild(null, "b");
 
-		navigator.onEndElement(handler, "a");
+		navigator.onEndChild(null, "a");
 
-		assertEquals("foobar", chars);
+		assertEquals("foobar", handler.chars);
 
-		navigator.onEndElement(handler, "body");
+		navigator.onEndChild(null, "body");
 
-		navigator.onEndMatching(handler, null);
+		navigator.onEndMatching(null, null);
 
-		assertCallback("c");
+		assertCallback(handler, "c", null);
 
 	}
 
 	@Test
 	public void testDirectChild() {
-		CssNavigator<Object> navigator = new CssNavigator<Object>();
+		CssNavigator navigator = new CssNavigator();
 
-		navigator.register("a > b", new TestCallback("b"));
-		navigator.onStartMatching(handler, "body", empty);
+		final TestCallback handler = new TestCallback();
+		navigator.register("a > b", handler);
+		navigator.onStartMatching(null, "body", empty);
 
-		navigator.onStartElement(handler, "body", empty);
+		navigator.onStartChild(null, "body", empty);
 
-		navigator.onStartElement(handler, "a", empty);
+		navigator.onStartChild(null, "a", empty);
 
-		navigator.onStartElement(handler, "b", empty);
+		navigator.onStartChild(null, "b", empty);
 
-		navigator.onCharacters(handler, "foobar");
+		navigator.onCharacters(null, "foobar");
 
-		navigator.onEndElement(handler, "b");
-		
-		navigator.onCharacters(handler, "not this");
+		navigator.onEndChild(null, "b");
 
-		navigator.onEndElement(handler, "a");
+		navigator.onCharacters(null, "not this");
 
-		navigator.onEndElement(handler, "body");
+		navigator.onEndChild(null, "a");
 
-		navigator.onEndMatching(handler, null);
+		navigator.onEndChild(null, "body");
 
-		assertCallback("b");
+		navigator.onEndMatching(null, null);
 
-		assertEquals("foobar", chars);
+		assertCallback(handler, "b", null);
+
+		assertEquals("foobar", handler.chars);
 	}
 
 	@Test
 	public void testDirectChildNoMatch() {
-		CssNavigator<Object> navigator = new CssNavigator<Object>();
+		CssNavigator navigator = new CssNavigator();
 
-		navigator.register("a > c", new TestCallback(null));
-		navigator.onStartMatching(handler, "body", empty);
+		final TestCallback handler = new TestCallback();
+		navigator.register("a > c", handler);
+		navigator.onStartMatching(null, "body", empty);
 
-		navigator.onStartElement(handler, "body", empty);
+		navigator.onStartChild(null, "body", empty);
 
-		navigator.onStartElement(handler, "a", empty);
+		navigator.onStartChild(null, "a", empty);
 
-		navigator.onStartElement(handler, "b", empty);
+		navigator.onStartChild(null, "b", empty);
 
-		navigator.onStartElement(handler, "c", empty);
-		navigator.onCharacters(handler, "foobar");
-		navigator.onEndElement(handler, "c");
+		navigator.onStartChild(null, "c", empty);
+		navigator.onCharacters(null, "foobar");
+		navigator.onEndChild(null, "c");
 
-		navigator.onCharacters(handler, "not this");
+		navigator.onCharacters(null, "not this");
 
-		navigator.onEndElement(handler, "b");
+		navigator.onEndChild(null, "b");
 
-		navigator.onEndElement(handler, "a");
+		navigator.onEndChild(null, "a");
 
-		assertNull(chars);
+		assertNull(handler.chars);
 
-		navigator.onEndElement(handler, "body");
+		navigator.onEndChild(null, "body");
 
-		navigator.onEndMatching(handler, null);
+		navigator.onEndMatching(null, null);
 
-		assertCallback(null);
+		assertEquals(0, handler.tags.size());
 	}
 
 	@Test
 	public void testDirectSibling() {
-		CssNavigator<Object> navigator = new CssNavigator<Object>();
+		CssNavigator navigator = new CssNavigator();
 
-		navigator.register("a + b + c", new TestCallback("c"));
-		navigator.onStartMatching(handler, "body", empty);
+		final TestCallback handler = new TestCallback();
+		navigator.register("a + b + c", handler);
+		navigator.onStartMatching(null, "body", empty);
 
-		navigator.onStartElement(handler, "body", empty);
+		navigator.onStartChild(null, "body", empty);
 
-		navigator.onStartElement(handler, "a", empty);
-		navigator.onEndElement(handler, "a");
+		navigator.onStartChild(null, "a", empty);
+		navigator.onEndChild(null, "a");
 
-		navigator.onStartElement(handler, "b", empty);
-		navigator.onEndElement(handler, "b");
+		navigator.onStartChild(null, "b", empty);
+		navigator.onEndChild(null, "b");
 
-		navigator.onStartElement(handler, "c", empty);
-		navigator.onEndElement(handler, "c");
+		navigator.onStartChild(null, "c", empty);
+		navigator.onStartChild(null, "d", empty);
+		navigator.onEndChild(null, "d");
+		navigator.onEndChild(null, "c");
 
-		navigator.onEndElement(handler, "body");
+		navigator.onEndChild(null, "body");
 
-		navigator.onEndMatching(handler, null);
+		navigator.onEndMatching(null, null);
 
-		assertCallback("c");
+		assertCallback(handler, "c", "d");
 
 	}
 
 	@Test
 	public void testDirectSiblingNoMatch() {
-		CssNavigator<Object> navigator = new CssNavigator<Object>();
+		CssNavigator navigator = new CssNavigator();
 
-		navigator.register("a + b + c", new TestCallback("c"));
-		navigator.onStartMatching(handler, "body", empty);
+		final TestCallback handler = new TestCallback();
+		navigator.register("a + b + c", handler);
+		navigator.onStartMatching(null, "body", empty);
 
-		navigator.onStartElement(handler, "body", empty);
+		navigator.onStartChild(null, "body", empty);
 
-		navigator.onStartElement(handler, "a", empty);
-		navigator.onEndElement(handler, "a");
+		navigator.onStartChild(null, "a", empty);
+		navigator.onEndChild(null, "a");
 
-		navigator.onStartElement(handler, "b", empty);
-		
-		navigator.onStartElement(handler, "c", empty);
-		navigator.onEndElement(handler, "c");
-		
-		navigator.onEndElement(handler, "b");
+		navigator.onStartChild(null, "b", empty);
 
-		navigator.onEndElement(handler, "body");
+		navigator.onStartChild(null, "c", empty);
+		navigator.onEndChild(null, "c");
 
-		navigator.onEndMatching(handler, null);
+		navigator.onEndChild(null, "b");
 
-		assertCallback(null);
+		navigator.onEndChild(null, "body");
 
+		navigator.onEndMatching(null, null);
+
+		assertEquals(0, handler.tags.size());
+	}
+
+	@Test
+	public void testSibling() {
+		CssNavigator navigator = new CssNavigator();
+
+		final TestCallback handler = new TestCallback();
+		navigator.register("a ~ c", handler);
+		navigator.onStartMatching(null, "body", empty);
+
+		navigator.onStartChild(null, "body", empty);
+
+		navigator.onStartChild(null, "a", empty);
+		navigator.onEndChild(null, "a");
+
+		navigator.onStartChild(null, "b", empty);
+		navigator.onEndChild(null, "b");
+
+		navigator.onStartChild(null, "c", empty);
+		navigator.onEndChild(null, "c");
+
+		navigator.onEndChild(null, "body");
+
+		navigator.onEndMatching(null, null);
+
+		assertCallback(handler, "c", null);
+
+	}
+
+	@Test
+	public void testNoChildCall() {
+		CssNavigator navigator = new CssNavigator();
+
+		navigator.register("a", new TestCallback() {
+			@Override
+			public void onStartChild(CssNavigator handler, CharSequence tag,
+					Map<CharSequence, CharSequence> attributes) {
+				fail("a has no children!");
+			}
+
+			@Override
+			public void onEndChild(CssNavigator handler, CharSequence tag) {
+				fail("a has no children!");
+			}
+		});
+		navigator.onStartMatching(null, "body", empty);
+
+		navigator.onStartChild(null, "body", empty);
+
+		navigator.onStartChild(null, "a", empty);
+		navigator.onEndChild(null, "a");
+
+		navigator.onEndChild(null, "body");
+
+		navigator.onEndMatching(null, null);
+	}
+
+	@Test
+	public void testClassSelector() {
+		CssNavigator navigator = new CssNavigator();
+
+		final TestCallback handler = new TestCallback();
+		navigator.register("a.foo", handler);
+		navigator.onStartMatching(null, "body", empty);
+
+		navigator.onStartChild(null, "body", empty);
+
+		HashMap<CharSequence, CharSequence> clses = new HashMap<CharSequence, CharSequence>();
+		clses.put("class", "baz foo bar");
+		navigator.onStartChild(null, "a", clses);
+		navigator.onEndChild(null, "a");
+
+		navigator.onEndChild(null, "body");
+
+		navigator.onEndMatching(null, null);
+
+		assertCallback(handler, "a", null);
 	}
 	
 	@Test
-	public void testSibling() {
-		CssNavigator<Object> navigator = new CssNavigator<Object>();
+	public void testClassSelectorNoMatch() {
+		CssNavigator navigator = new CssNavigator();
 
-		navigator.register("a ~ c", new TestCallback("c"));
-		navigator.onStartMatching(handler, "body", empty);
+		final TestCallback handler = new TestCallback();
+		navigator.register("a.foo", handler);
+		navigator.onStartMatching(null, "body", empty);
 
-		navigator.onStartElement(handler, "body", empty);
+		navigator.onStartChild(null, "body", empty);
 
-		navigator.onStartElement(handler, "a", empty);
-		navigator.onEndElement(handler, "a");
+		HashMap<CharSequence, CharSequence> clses = new HashMap<CharSequence, CharSequence>();
+		clses.put("class", "baz foobar foo_");
+		navigator.onStartChild(null, "a", clses);
+		navigator.onEndChild(null, "a");
 
-		navigator.onStartElement(handler, "b", empty);
-		navigator.onEndElement(handler, "b");
+		navigator.onEndChild(null, "body");
 
-		navigator.onStartElement(handler, "c", empty);
-		navigator.onEndElement(handler, "c");
+		navigator.onEndMatching(null, null);
 
-		navigator.onEndElement(handler, "body");
-
-		navigator.onEndMatching(handler, null);
-
-		assertCallback("c");
-
+		assertEquals(0, handler.tags.size());
 	}
-
-	public void assertCallback(CharSequence tag) {
-		assertEquals(tag, matched);
-		assertEquals(tag, start);
-		assertEquals(tag, end);
-		assertEquals(tag, unmatched);
+	
+	public void assertCallback(TestCallback handler, CharSequence tag, CharSequence childTag) {
+		TestCallback.Tag tagObj = handler.tags.get(0);
+		assertEquals(tag, tagObj.name);
+		assertTrue(tagObj.closed);
+		if (childTag != null) {
+			tagObj.childTags.contains(childTag);
+		}
 	}
 
 }

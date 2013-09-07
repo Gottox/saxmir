@@ -20,7 +20,7 @@ public class CssHandlerTest {
 
 	private static final String HIERACHICAL = "<a>" +
 	 " <b attr='foo'>" +
-	 "  <c>" +
+	 "  <c class='c1 c2 c3'>" +
 	 "  </c>" +
 	 " </b>" +
 	"</a>";
@@ -31,27 +31,27 @@ public class CssHandlerTest {
 		xmlReader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 		
 		CssHandler handler = new CssHandler();
-		handler.register("[attr]", new CssSelectorCallback<CssHandler>() {
+		handler.getNavigator().register("[attr]", new CssSelectorCallback() {
 			
 			@Override
-			public void onStartElement(CssHandler handler, CharSequence tag,
+			public void onStartChild(CssNavigator handler, CharSequence tag,
 					Map<CharSequence, CharSequence> attributes) {
 			}
 			
 			@Override
-			public void onEndElement(CssHandler handler, CharSequence tag) {
+			public void onEndChild(CssNavigator handler, CharSequence tag) {
 				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
-			public void onCharacters(CssHandler handler, CharSequence seq) {
+			public void onCharacters(CssNavigator handler, CharSequence seq) {
 				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
-			public void onStartMatching(CssHandler handler, CharSequence tag,
+			public void onStartMatching(CssNavigator handler, CharSequence tag,
 					Map<CharSequence, CharSequence> attributes) {
 				assertTrue(attributes.containsKey("attr"));
 				System.out.println(tag);
@@ -59,7 +59,7 @@ public class CssHandlerTest {
 			}
 
 			@Override
-			public void onEndMatching(CssHandler handler, CharSequence tag) {
+			public void onEndMatching(CssNavigator handler, CharSequence tag) {
 				// TODO Auto-generated method stub
 				
 			}
