@@ -1,4 +1,4 @@
-package de.gottox.saxmir.processor;
+package de.gottox.saxmir.controller;
 
 import java.util.Map;
 

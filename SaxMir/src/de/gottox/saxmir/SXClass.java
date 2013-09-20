@@ -9,8 +9,8 @@ import java.util.Map;
 
 import de.gottox.saxmir.annotation.Selector;
 import de.gottox.saxmir.annotation.Selectors;
+import de.gottox.saxmir.controller.Processor;
 import de.gottox.saxmir.css.CssNavigator;
-import de.gottox.saxmir.processor.Processor;
 
 public class SXClass {
 	private Class<?> cls;

@@ -17,10 +17,10 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import de.gottox.saxmir.annotation.Selector;
-import de.gottox.saxmir.processor.InnerXml;
-import de.gottox.saxmir.processor.Num;
-import de.gottox.saxmir.processor.OuterXml;
-import de.gottox.saxmir.processor.Text;
+import de.gottox.saxmir.controller.InnerXml;
+import de.gottox.saxmir.controller.Num;
+import de.gottox.saxmir.controller.OuterXml;
+import de.gottox.saxmir.controller.Text;
 
 public class SXDeserializerTest {
 	String xml = "<root>"

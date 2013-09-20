@@ -11,20 +11,20 @@ import java.util.Set;
 import java.util.Stack;
 
 import de.gottox.saxmir.annotation.Selector;
+import de.gottox.saxmir.controller.ByteNum;
+import de.gottox.saxmir.controller.ComplexProcessor;
+import de.gottox.saxmir.controller.Date;
+import de.gottox.saxmir.controller.DoubleNum;
+import de.gottox.saxmir.controller.FloatNum;
+import de.gottox.saxmir.controller.IntegerNum;
+import de.gottox.saxmir.controller.LongNum;
+import de.gottox.saxmir.controller.Num;
+import de.gottox.saxmir.controller.Processor;
+import de.gottox.saxmir.controller.ShortNum;
+import de.gottox.saxmir.controller.Text;
 import de.gottox.saxmir.css.CssNavigator;
 import de.gottox.saxmir.css.CssSelector;
 import de.gottox.saxmir.css.CssSelectorCallback;
-import de.gottox.saxmir.processor.ByteNum;
-import de.gottox.saxmir.processor.ComplexProcessor;
-import de.gottox.saxmir.processor.Date;
-import de.gottox.saxmir.processor.DoubleNum;
-import de.gottox.saxmir.processor.FloatNum;
-import de.gottox.saxmir.processor.IntegerNum;
-import de.gottox.saxmir.processor.LongNum;
-import de.gottox.saxmir.processor.Num;
-import de.gottox.saxmir.processor.Processor;
-import de.gottox.saxmir.processor.ShortNum;
-import de.gottox.saxmir.processor.Text;
 
 public class SXField {
 	final public AccessibleObject ao;
