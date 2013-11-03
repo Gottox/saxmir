@@ -9,8 +9,7 @@ import de.gottox.saxmir.css.CssNavigatorTest;
 import de.gottox.saxmir.css.CssSelectorTest;
 
 @RunWith(Suite.class)
-@SuiteClasses({ CssNavigatorTest.class, CssSelectorTest.class,
-		CssHandlerTest.class, SXDeserializerTest.class })
+@SuiteClasses({ SXTest.class, CssHandlerTest.class, CssNavigatorTest.class, CssSelectorTest.class })
 public class AllTests {
 
 }
