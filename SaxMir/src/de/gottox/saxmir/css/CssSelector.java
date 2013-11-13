@@ -64,7 +64,6 @@ public class CssSelector {
 	}
 
 	String tagname = "*";
-	String id = null;
 	HashMap<String, List<AttributeMatcher>> attributes = new HashMap<String, List<AttributeMatcher>>();
 	HashSet<String> pseudoClasses = new HashSet<String>();
 
@@ -116,7 +115,8 @@ public class CssSelector {
 				current.combinator = token.charAt(0);
 				current.root = root;
 			} else if (token.equals("#")) {
-				current.id = seq.get(i++).toString();
+				current.addAttributeMatcher("id", MatcherType.EQUALS,
+						seq.get(++i));
 			} else if (token.equals(".")) {
 				current.addAttributeMatcher("class", MatcherType.LIST_CONTAINS,
 						seq.get(++i));
@@ -219,8 +219,8 @@ public class CssSelector {
 				if (Character.isLetter(chr) || Character.isDigit(chr)
 						|| "-_".indexOf(chr) >= 0) {
 					while (i + 1 < seq.length()
-							&& Character.isLetter(chr = seq.charAt(i + 1))
-							|| Character.isDigit(chr) || "-_".indexOf(chr) >= 0)
+							&& (Character.isLetter(chr = seq.charAt(i + 1))
+							|| Character.isDigit(chr) || "-_".indexOf(chr) >= 0))
 						i++;
 					tokens.add(seq.subSequence(begin, i + 1));
 				}
@@ -245,10 +245,6 @@ public class CssSelector {
 			builder.append(combinator);
 			builder.append(tagname);
 		}
-		if (id != null) {
-			builder.append('#');
-			builder.append(id);
-		}
 		for (String pseudoCls : pseudoClasses) {
 			builder.append(':');
 			builder.append(pseudoCls);
@@ -270,10 +266,6 @@ public class CssSelector {
 			Map<CharSequence, CharSequence> attr, int index) {
 		// MATCH TAGNAME
 		if (!"*".equals(this.tagname) && !tagname.equals(this.tagname))
-			return false;
-
-		// MATCH ID
-		else if (this.id != null && !this.id.equals(attr.get("id")))
 			return false;
 
 		// MATCH ATTRIBUTES
