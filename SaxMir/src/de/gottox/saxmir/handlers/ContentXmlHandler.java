@@ -9,7 +9,7 @@ import de.gottox.saxmir.SxController;
 import de.gottox.saxmir.css.CssNavigator;
 
 public class ContentXmlHandler extends AbsHandler {
-    final protected StringBuilder builder = new StringBuilder();
+    protected StringBuilder builder = new StringBuilder();
     protected CharSequence result;
     
 	public ContentXmlHandler(SxController controller, Method m, Sx sx) {
@@ -26,6 +26,13 @@ public class ContentXmlHandler extends AbsHandler {
 					.append(escapeHtml(e.getValue())).append('"');
 		}
 		builder.append(">");
+	}
+	
+	@Override
+	public void onStartMatching(CssNavigator handler, CharSequence tag,
+			Map<CharSequence, CharSequence> attributes) {
+		super.onStartMatching(handler, tag, attributes);
+		builder = new StringBuilder();
 	}
 	
 	@Override
