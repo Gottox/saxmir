@@ -60,7 +60,7 @@ public class Sx extends CssHandler {
 		if (m.getName().endsWith("_xml"))
 			handler = new ContentXmlHandler(controller, m, this);
 		else if (m.getName().endsWith("_outerXml"))
-			handler = new ContentXmlHandler(controller, m, this);
+			handler = new ContentOuterXmlHandler(controller, m, this);
 		else if (m.getName().endsWith("_plain"))
 			handler = new ContentPlainHandler(controller, m, this);
 		else if(m.getName().endsWith("_after"))
