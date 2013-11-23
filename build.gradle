@@ -1,5 +1,9 @@
 apply plugin: 'java'
 
+group = 'de.gottox'
+description = 'CSS selectors for SAX'
+version = 'master'
+
 repositories {
     mavenCentral()
 }
