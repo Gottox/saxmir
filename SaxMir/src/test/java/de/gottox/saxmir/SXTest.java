@@ -55,7 +55,6 @@ public class SXTest {
 	
 	@Test
 	public void testInstanciate() {
-		Integer.parseInt("33 foobar");
 		assertNotNull(Sx.mk(new SxController() {
 		}));
 	}
