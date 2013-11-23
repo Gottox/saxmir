@@ -6,7 +6,6 @@ import java.util.Map;
 
 import de.gottox.saxmir.Sx;
 import de.gottox.saxmir.SxController;
-import de.gottox.saxmir.css.CssHandler;
 import de.gottox.saxmir.css.CssNavigator;
 import de.gottox.saxmir.css.CssSelectorCallback;
 

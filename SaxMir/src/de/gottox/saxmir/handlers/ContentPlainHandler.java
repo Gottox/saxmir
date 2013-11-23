@@ -1,8 +1,6 @@
 package de.gottox.saxmir.handlers;
 
 import java.lang.reflect.Method;
-import java.util.Map;
-
 import de.gottox.saxmir.Sx;
 import de.gottox.saxmir.SxController;
 import de.gottox.saxmir.css.CssNavigator;

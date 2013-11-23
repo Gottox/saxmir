@@ -2,12 +2,9 @@ package de.gottox.saxmir.handlers;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Map.Entry;
-
 import de.gottox.saxmir.Sx;
 import de.gottox.saxmir.SxController;
 import de.gottox.saxmir.css.CssNavigator;
-import de.gottox.saxmir.css.CssSelectorCallback;
 
 public class ContentOuterXmlHandler extends ContentXmlHandler {
 

@@ -1,5 +1,6 @@
 package de.gottox.saxmir;
 
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 
 import org.xml.sax.helpers.DefaultHandler;
@@ -21,7 +22,7 @@ public class Sx extends CssHandler {
 		for (Class<?> c = controller.getClass(); c != SxController.class; c = c
 				.getSuperclass()) {
 			Method[] methods = c.getDeclaredMethods();
-			Method.setAccessible(methods, true);
+			AccessibleObject.setAccessible(methods, true);
 			for (Method m : methods) {
 				genSetter(m, controller);
 			}

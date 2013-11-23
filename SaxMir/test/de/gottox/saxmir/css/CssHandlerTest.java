@@ -2,10 +2,6 @@ package de.gottox.saxmir.css;
 
 import static org.junit.Assert.*;
 
-import java.beans.XMLDecoder;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Map;
@@ -40,14 +36,10 @@ public class CssHandlerTest {
 			
 			@Override
 			public void onEndChild(CssNavigator handler, CharSequence tag) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
 			public void onCharacters(CssNavigator handler, CharSequence seq) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
@@ -60,8 +52,6 @@ public class CssHandlerTest {
 
 			@Override
 			public void onEndMatching(CssNavigator handler, CharSequence tag) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		
