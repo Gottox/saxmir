@@ -3,9 +3,11 @@ description = 'CSS selectors for SAX'
 version = 'master'
 
 apply plugin: 'java'
+apply plugin: 'maven'
 
 repositories {
-    mavenCentral()
+  mavenLocal()
+  mavenCentral()
 }
 
 dependencies {
