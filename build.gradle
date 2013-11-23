@@ -1,6 +1,6 @@
 group = 'de.gottox'
 description = 'CSS selectors for SAX'
-version = '0.1'
+version = 'master'
 
 apply plugin: 'java'
 
