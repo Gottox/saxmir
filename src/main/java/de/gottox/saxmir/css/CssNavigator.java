@@ -12,27 +12,27 @@ public class CssNavigator implements CssSelectorCallback {
 		final HashMap<CssSelector, CssSelectorCallback> childSelectors;
 		final HashSet<CssSelectorCallback> matchingHandler;
 
-		final HashSet<CssSelectorCallback> matchingHandlerRoot = new HashSet<CssSelectorCallback>();
-		HashMap<CssSelector, CssSelectorCallback> nextElementSelector = new HashMap<CssSelector, CssSelectorCallback>();
-		HashMap<CssSelector, CssSelectorCallback> directChildSelectors = new HashMap<CssSelector, CssSelectorCallback>();
+		final HashSet<CssSelectorCallback> matchingHandlerRoot = new HashSet<>();
+		HashMap<CssSelector, CssSelectorCallback> nextElementSelector = new HashMap<>();
+		HashMap<CssSelector, CssSelectorCallback> directChildSelectors = new HashMap<>();
 		
 		int index = 0;
 
 		public State(State parent) {
-			childSelectors = new HashMap<CssSelector, CssSelectorCallback>(
+			childSelectors = new HashMap<>(
 					parent.childSelectors);
-			matchingHandler = new HashSet<CssSelectorCallback>(
+			matchingHandler = new HashSet<>(
 					parent.matchingHandler);
 			matchingHandler.addAll(parent.matchingHandlerRoot);
 		}
 
 		public State() {
-			childSelectors = new HashMap<CssSelector, CssSelectorCallback>();
-			matchingHandler = new HashSet<CssSelectorCallback>();
+			childSelectors = new HashMap<>();
+			matchingHandler = new HashSet<>();
 		}
 	}
 
-	private Stack<State> states = new Stack<State>();
+	private Stack<State> states = new Stack<>();
 	private State currentState = new State();
 	private Map<CharSequence, CharSequence> attributes;
 	private CharSequence tagname;
@@ -60,7 +60,7 @@ public class CssNavigator implements CssSelectorCallback {
 		State newState = new State(oldState);
 		HashMap<CssSelector, CssSelectorCallback> thisElementHandler = oldState.nextElementSelector;
 		oldState.index++;
-		oldState.nextElementSelector = new HashMap<CssSelector, CssSelectorCallback>();
+		oldState.nextElementSelector = new HashMap<>();
 
 		currentState = newState;
 		handleNewElement(oldState, newState,
@@ -82,7 +82,7 @@ public class CssNavigator implements CssSelectorCallback {
 
 	private void handleNewElement(State oldState,
 			State newState, Map<CssSelector, CssSelectorCallback> handler) {
-		Set<Entry<CssSelector, CssSelectorCallback>> entrySet = new HashSet<Entry<CssSelector, CssSelectorCallback>>(
+		Set<Entry<CssSelector, CssSelectorCallback>> entrySet = new HashSet<>(
 				handler.entrySet());
 		for (Entry<CssSelector, CssSelectorCallback> entry : entrySet) {
 			handleNewElement(oldState, newState, entry.getKey(), entry.getValue());

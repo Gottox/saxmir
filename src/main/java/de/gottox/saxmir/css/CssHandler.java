@@ -16,7 +16,7 @@ public class CssHandler extends DefaultHandler {
 	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes attrs) throws SAXException {
-		HashMap<CharSequence, CharSequence> attrHash = new HashMap<CharSequence, CharSequence>();
+		HashMap<CharSequence, CharSequence> attrHash = new HashMap<>();
 		for(int i = 0; i < attrs.getLength(); i++) {
 			attrHash.put(attrs.getLocalName(i), attrs.getValue(i));
 		}
