@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     testCompile 'junit:junit:4.10'
+    testCompile 'org.ccil.cowan.tagsoup:tagsoup:1.2.1'
 }
 
 task wrapper(type: Wrapper) {
